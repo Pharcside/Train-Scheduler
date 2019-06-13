@@ -15,6 +15,8 @@ var firebaseConfig = {
   //button for adding trains
   $("#add-train-btn").on("click", function(event) {
     event.preventDefault();
+  
+ 
 
   // grabs user data
   var trainInput = $("#add-train-input").val().trim();
@@ -29,6 +31,11 @@ var firebaseConfig = {
     Destination: destInput,
     Start: startInput,
     Frequency: frequencyInput,
+  //  Next: nextArrival,
+  //  Away: minutesAway,
+
+
+
   };
 
   // Uploads employee data to the database
@@ -39,8 +46,14 @@ var firebaseConfig = {
   console.log(newTrain.Destination);
   console.log(newTrain.Start);
   console.log(newTrain.Frequency);
+ // console.log(newTrain.Next);
+ // console.log(newTrain.Away);
 
-  alert("Train Added Successfully");
+ alert("Train Added Successfully");
+ 
+ 
+
+  
 
  // clears input
   $("#add-train-input").val("");
@@ -58,6 +71,7 @@ database.ref().on("child_added", function(childSnapshot) {
   var destInput = childSnapshot.val().Destination;
   var startInput = childSnapshot.val().Start;
   var ferequencyInput = childSnapshot.val().Frequency;
+  
 
 // Log trian Info
 console.log(trainInput);
@@ -67,11 +81,31 @@ console.log(ferequencyInput);
 
  // Calculate frequency
 
+ var tFrequency = ferequencyInput;
+ var firstTime = startInput;
+
+ var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+   
+
+var currentTime = moment();
+console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    
+
+var minutesAway = moment().diff(moment(firstTimeConverted), "minutes");
+
+var tRemainder = minutesAway % tFrequency;
+
+var tMinutesTillTrain = tFrequency - tRemainder;
+
+var nextArrival = moment().add(tMinutesTillTrain, "minutes");
+
  var newRow = $("<tr>").append(
     $("<td>").text(trainInput),
     $("<td>").text(destInput),
     $("<td>").text(startInput),
     $("<td>").text(ferequencyInput),
+    $("<td>").text(nextArrival),
+    $("<td>").text(minutesAway)
     
   );
   $("#train-table > tbody").append(newRow);
