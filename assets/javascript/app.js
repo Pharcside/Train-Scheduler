@@ -84,6 +84,7 @@ console.log(ferequencyInput);
  var tFrequency = ferequencyInput;
  var firstTime = startInput;
 
+
  var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
    
 
@@ -91,7 +92,11 @@ var currentTime = moment();
 console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
     
 
-var minutesAway = moment().diff(moment(firstTimeConverted), "minutes");
+var remainder = firstTimeConverted % tFrequency;
+
+//var minutesAway = moment().diff(moment(firstTimeConverted), "minutes");
+var minutesAway = tFrequency - remainder;
+console.log(minutesAway);
 
 var tRemainder = minutesAway % tFrequency;
 
